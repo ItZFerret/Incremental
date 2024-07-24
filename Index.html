@@ -7,6 +7,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <script src="https://kit.fontawesome.com/e5ae7eaf74.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <div class="container-fluid">
@@ -85,6 +86,27 @@
                         <p><i class="fas fa-users"></i> Total Workers Hired: <span id="totalWorkersHired">0</span></p>
                         <p><i class="fas fa-microscope"></i> Total Technologies Researched: <span id="totalTechResearched">0</span></p>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-3">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="fas fa-chart-line"></i> Detailed Statistics</h5>
+                    <ul id="detailedStats" class="list-group">
+                        <!-- Detailed stats will be added here dynamically -->
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="fas fa-chart-bar"></i> Graphs</h5>
+                    <canvas id="productionChart"></canvas>
+                    <canvas id="resourceChart"></canvas>
                 </div>
             </div>
         </div>
