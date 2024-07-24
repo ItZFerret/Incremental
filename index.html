@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Incremental Game</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://kit.fontawesome.com/e5ae7eaf74.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class="container-fluid">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#"><i class="fas fa-crown"></i> Incremental Empire</a>
+                <div class="form-check form-switch ms-auto">
+                    <input class="form-check-input" type="checkbox" id="darkModeToggle">
+                    <label class="form-check-label" for="darkModeToggle"><i class="fas fa-moon"></i> Dark Mode</label>
+                </div>
+            </div>
+        </nav>
+
+        <div class="row mt-3">
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title"><i class="fas fa-coins"></i> Resources</h5>
+                        <p><i class="fas fa-coins"></i> Gold: <span id="gold">0</span></p>
+                        <p><i class="fas fa-users"></i> Workers: <span id="workers">0</span></p>
+                        <p><i class="fas fa-microscope"></i> Technology: <span id="technology">0</span></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title"><i class="fas fa-tasks"></i> Actions</h5>
+                        <button id="mineGold" class="btn btn-primary mb-2"><i class="fas fa-hammer"></i> Mine Gold</button>
+                        <button id="hireWorker" class="btn btn-secondary mb-2"><i class="fas fa-user-plus"></i> Hire Worker</button>
+                        <button id="researchTech" class="btn btn-info"><i class="fas fa-flask"></i> Research Technology</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title"><i class="fas fa-arrow-up"></i> Upgrades</h5>
+                        <ul id="upgradesList" class="list-group">
+                            <!-- Upgrades will be added here dynamically -->
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-3">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title"><i class="fas fa-tree"></i> Skill Tree</h5>
+                        <div id="skillTree" class="row">
+                            <!-- Skill tree will be added here dynamically -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-3">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title"><i class="fas fa-trophy"></i> Achievements</h5>
+                        <ul id="achievementsList" class="list-group">
+                            <!-- Achievements will be added here dynamically -->
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title"><i class="fas fa-chart-line"></i> Statistics</h5>
+                        <p><i class="fas fa-coins"></i> Total Gold Mined: <span id="totalGoldMined">0</span></p>
+                        <p><i class="fas fa-users"></i> Total Workers Hired: <span id="totalWorkersHired">0</span></p>
+                        <p><i class="fas fa-microscope"></i> Total Technologies Researched: <span id="totalTechResearched">0</span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

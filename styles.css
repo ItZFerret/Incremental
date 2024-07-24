@@ -1,0 +1,36 @@
+body {
+    transition: background-color 0.3s, color 0.3s;
+}
+
+body.dark-mode {
+    background-color: #1a1a1a;
+    color: #f0f0f0;
+}
+
+.dark-mode .card {
+    background-color: #2a2a2a;
+    color: #f0f0f0;
+}
+
+.dark-mode .navbar {
+    background-color: #2a2a2a !important;
+}
+
+.dark-mode .navbar-brand {
+    color: #f0f0f0;
+}
+
+.dark-mode .btn-primary {
+    background-color: #0056b3;
+    border-color: #004085;
+}
+
+.dark-mode .btn-secondary {
+    background-color: #5a6268;
+    border-color: #545b62;
+}
+
+.dark-mode .btn-info {
+    background-color: #138496;
+    border-color: #117a8b;
+}
