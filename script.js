@@ -50,6 +50,20 @@ const game = {
             { id: 'research3', name: 'Breakthrough', cost: 40, effect: () => { game.researchCost *= 0.7; game.goldPerClick *= 1.5; game.goldPerWorker *= 1.5; }, icon: 'fa-lightbulb', purchased: false, requires: 'research2' },
         ],
     },
+    statistics: {
+        goldPerSecond: 0,
+        peakGoldPerSecond: 0,
+        totalClicks: 0,
+        peakWorkers: 0,
+        techResearchedThisPrestige: 0,
+    },
+    graphData: {
+        labels: [],
+        goldPerSecond: [],
+        totalGold: [],
+        workers: [],
+        technology: [],
+    },
 };
 
 // DOM elements
@@ -82,6 +96,7 @@ function updateDisplay() {
 mineGoldButton.addEventListener('click', () => {
     game.gold += game.goldPerClick;
     game.totalGoldMined += game.goldPerClick;
+    game.statistics.totalClicks++;
     updateDisplay();
     checkAchievements();
 });
@@ -104,9 +119,10 @@ researchTechButton.addEventListener('click', () => {
         game.gold -= game.researchCost;
         game.technology++;
         game.totalTechResearched++;
+        game.statistics.techResearchedThisPrestige++;
         game.researchCost = Math.floor(game.researchCost * 1.5);
         updateDisplay();
-        createSkillTree(); // Update skill tree to reflect new technology amount
+        createSkillTree();
         checkAchievements();
     }
 });
@@ -116,13 +132,19 @@ setInterval(() => {
     const production = game.workers * game.goldPerWorker;
     game.gold += production;
     game.totalGoldMined += production;
+    game.statistics.goldPerSecond = production;
+    game.statistics.peakGoldPerSecond = Math.max(game.statistics.peakGoldPerSecond, production);
+    game.statistics.peakWorkers = Math.max(game.statistics.peakWorkers, game.workers);
     updateDisplay();
+    updateDetailedStats();
+    updateGraphData();
+    updateCharts();
     checkAchievements();
 }, 1000);
 
 // Create upgrades
 function createUpgrades() {
-    upgradesList.innerHTML = ''; // Clear existing upgrades
+    upgradesList.innerHTML = '';
     game.upgrades.forEach(upgrade => {
         const li = document.createElement('li');
         li.className = 'list-group-item d-flex justify-content-between align-items-center';
@@ -146,7 +168,7 @@ function buyUpgrade(upgrade) {
         upgrade.purchased++;
         upgrade.cost = Math.floor(upgrade.baseCost * Math.pow(1.15, upgrade.purchased));
         updateDisplay();
-        createUpgrades(); // Recreate upgrades list with updated costs
+        createUpgrades();
         checkAchievements();
     }
 }
@@ -207,7 +229,6 @@ function checkAchievements() {
             li.innerHTML = `<i class="fas ${achievement.icon} me-2"></i> ${achievement.name}`;
             achievementsList.appendChild(li);
             
-            // Show achievement notification
             showNotification(`<i class="fas ${achievement.icon}"></i> Achievement Unlocked: ${achievement.name}`);
         }
     });
@@ -231,6 +252,101 @@ function showNotification(message) {
     }, 3000);
 }
 
+// Update detailed statistics
+function updateDetailedStats() {
+    const statsElement = document.getElementById('detailedStats');
+    statsElement.innerHTML = `
+        <li class="list-group-item">Gold per second: ${game.statistics.goldPerSecond.toFixed(2)}</li>
+        <li class="list-group-item">Peak gold per second: ${game.statistics.peakGoldPerSecond.toFixed(2)}</li>
+        <li class="list-group-item">Total clicks: ${game.statistics.totalClicks}</li>
+        <li class="list-group-item">Peak workers: ${game.statistics.peakWorkers}</li>
+        <li class="list-group-item">Technology researched this prestige: ${game.statistics.techResearchedThisPrestige}</li>
+        <li class="list-group-item">Gold per click: ${game.goldPerClick.toFixed(2)}</li>
+        <li class="list-group-item">Gold per worker: ${game.goldPerWorker.toFixed(2)}</li>
+    `;
+}
+
+// Update graph data
+function updateGraphData() {
+    const now = new Date();
+    game.graphData.labels.push(now.toLocaleTimeString());
+    game.graphData.goldPerSecond.push(game.statistics.goldPerSecond);
+    game.graphData.totalGold.push(game.gold);
+    game.graphData.workers.push(game.workers);
+    game.graphData.technology.push(game.technology);
+
+    // Keep only the last 60 data points
+    if (game.graphData.labels.length > 60) {
+        game.graphData.labels.shift();
+        game.graphData.goldPerSecond.shift();
+        game.graphData.totalGold.shift();
+        game.graphData.workers.shift();
+        game.graphData.technology.shift();
+    }
+}
+
+// Create and update charts
+let productionChart, resourceChart;
+
+function createCharts() {
+    const ctxProduction = document.getElementById('productionChart').getContext('2d');
+    productionChart = new Chart(ctxProduction, {
+        type: 'line',
+        data: {
+            labels: game.graphData.labels,
+            datasets: [{
+                label: 'Gold per Second',
+                data: game.graphData.goldPerSecond,
+                borderColor: 'gold',
+                fill: false
+            }]
+        },
+        options: {
+            responsive: true,
+            title: {
+                display: true,
+                text: 'Gold Production Over Time'
+            }
+        }
+    });
+
+    const ctxResources = document.getElementById('resourceChart').getContext('2d');
+    resourceChart = new Chart(ctxResources, {
+        type: 'line',
+        data: {
+            labels: game.graphData.labels,
+            datasets: [{
+                label: 'Total Gold',
+                data: game.graphData.totalGold,
+                borderColor: 'gold',
+                fill: false
+            }, {
+                label: 'Workers',
+                data: game.graphData.workers,
+                borderColor: 'blue',
+                fill: false
+            }, {
+                label: 'Technology',
+                data: game.graphData.technology,
+                borderColor: 'green',
+                fill: false
+            }]
+        },
+        options: {
+            responsive: true,
+            title: {
+                display: true,
+                text: 'Resources Over Time'
+            }
+        }
+    });
+}
+
+function updateCharts() {
+    productionChart.update();
+    resourceChart.update();
+}
+
 // Dark mode toggle
 darkModeToggle.addEventListener('change', () => {
     document.body.classList.toggle('dark-mode');
@@ -239,4 +355,6 @@ darkModeToggle.addEventListener('change', () => {
 // Initialize game
 createUpgrades();
 createSkillTree();
+createCharts();
 updateDisplay();
+updateDetailedStats();
